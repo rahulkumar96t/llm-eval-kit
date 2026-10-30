@@ -1,0 +1,21 @@
+# Scores outputs that an app already produced (no model calls, no API key).
+# Useful for gating a pipeline on logged responses, and as an offline demo.
+name: support-replies-recorded
+description: Recorded replies from a support assistant, checked with deterministic scorers.
+dataset: replies.jsonl
+provider: recorded
+output_field: output
+prompt: "{question}"
+
+scorers:
+  - type: regex
+    name: no-ai-disclaimer
+    pattern: "as an ai (language )?model"
+    flags: i
+    negate: true
+
+thresholds:
+  pass_rate: 0.8
+  scorers:
+    no-ai-disclaimer:
+      pass_rate: 1.0

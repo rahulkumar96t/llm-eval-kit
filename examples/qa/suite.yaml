@@ -1,0 +1,31 @@
+# Live suite: calls Claude for every case (needs ANTHROPIC_API_KEY).
+# Run: llm-eval run examples/qa/suite.yaml --report-html report.html
+name: support-assistant-qa
+description: Short factual answers from a support assistant prompt, graded by rules and a judge.
+dataset: qa.jsonl
+provider: anthropic
+# model: claude-sonnet-5-5   # default; or set LLM_EVAL_MODEL / pass --model
+system: |
+  You are the support assistant for a small online bookshop. Policies:
+  returns within 30 days of delivery; standard shipping takes 3-5 business days;
+  orders over 40 EUR ship free. Answer in at most two sentences.
+prompt: "{question}"
+params:
+  max_tokens: 2048
+  effort: low
+
+scorers:
+  - type: llm_judge
+    name: judge
+    rubric: |
+      The answer must be consistent with this reference: "{reference}".
+      It must be at most two sentences and must not invent policies.
+    pass_score: 4
+
+thresholds:
+  pass_rate: 0.8
+  scorers:
+    judge:
+      mean_score: 0.75
+  max_regressions: 0
+  score_tolerance: 0.25

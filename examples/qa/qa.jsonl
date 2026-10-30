@@ -1,0 +1,5 @@
+{"id": "return-window", "question": "How many days do I have to return a book?", "reference": "Returns are accepted within 30 days of delivery.", "scorers": [{"type": "numeric", "expected": 30}]}
+{"id": "free-shipping", "question": "From what order value is shipping free?", "reference": "Orders over 40 EUR ship free.", "scorers": [{"type": "contains", "values": ["40"]}]}
+{"id": "shipping-time", "question": "How long does standard shipping take?", "reference": "Standard shipping takes 3-5 business days.", "scorers": [{"type": "regex", "pattern": "3\\s*(-|–|to)\\s*5"}]}
+{"id": "json-answer", "question": "Reply only with JSON of the form {\"free_shipping_threshold_eur\": <number>}.", "reference": "{\"free_shipping_threshold_eur\": 40}", "scorers": [{"type": "json_schema", "schema": {"type": "object", "properties": {"free_shipping_threshold_eur": {"type": "number"}}, "required": ["free_shipping_threshold_eur"], "additionalProperties": false}}]}
+{"id": "out-of-policy", "question": "Can I return a book after 90 days?", "reference": "No; returns are only accepted within 30 days of delivery.", "scorers": [{"type": "contains", "values": ["30"]}]}
